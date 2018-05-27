@@ -9,7 +9,7 @@ Database Buffers	  201326592 bytes
 Redo Buffers		    5455872 bytes
 ORA-00205: error in identifying control file, check alert log for more info
 
-
+After checking all avilable datafiles and redo log files:
 SQL> @/database/controlfile.sh
 CREATE CONTROLFILE
 *
