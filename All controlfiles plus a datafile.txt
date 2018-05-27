@@ -1,0 +1,379 @@
+We lost all controlfiles and there is no controlfiles backup, plus we lost one datafile.
+SQL> startup
+ORACLE instance started.
+
+Total System Global Area  796917760 bytes
+Fixed Size		    2929448 bytes
+Variable Size		  587205848 bytes
+Database Buffers	  201326592 bytes
+Redo Buffers		    5455872 bytes
+ORA-00205: error in identifying control file, check alert log for more info
+
+After checking all avilable datafiles and redo log files:
+SQL> @/database/controlfile.sh
+The creation code:
+CREATE CONTROLFILE
+   REUSE DATABASE ncscm
+   LOGFILE GROUP 1 ('/database/app/oracle/oradata/ncscm/redo01.log')size 50M, 
+           GROUP 2 ('/database/app/oracle/oradata/ncscm/redo02.log')size 50M,
+           GROUP 3 ('/database/app/oracle/oradata/ncscm/redo03.log')size 50M 
+ 	RESETLOGS
+   DATAFILE '/database/app/oracle/oradata/ncscm/system01.dbf',
+            '/database/app/oracle/oradata/ncscm/sysaux01.dbf',
+            '/database/app/oracle/oradata/ncscm/undotbs01.dbf',
+            '/database/app/oracle/oradata/ncscm/example01.dbf'
+   MAXLOGFILES 50
+   MAXLOGMEMBERS 3
+   MAXLOGHISTORY 400
+   MAXDATAFILES 200
+   MAXINSTANCES 6
+   ARCHIVELOG;
+
+Control file created.
+
+RMAN> list backup;
+
+using target database control file instead of recovery catalog
+specification does not match any backup in the repository
+
+RMAN> catalog start with'/fra/NCSCM';
+
+searching for all files that match the pattern /fra/NCSCM
+
+List of Files Unknown to the Database
+=====================================
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_9_fhbzrb54_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_10_fhbzrbo8_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_11_fhbzrcgv_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_10_fhc0osm8_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_11_fhc0ot5m_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_12_fhc0ot8s_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_11_fhc1hz3z_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_12_fhc1hz5q_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_13_fhc1hzgd_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_13_fhc3c38z_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_12_fhc3c3db_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_1_fhc4s1p3_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc4s2d7_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_3_fhc4s5x8_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_4_fhc58kqv_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc58ks2_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_1_fhc5crvo_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc5csnt_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_3_fhc5cxsq_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_4_fhc5n6fo_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc5n6gq_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_1_fhc67p8y_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc67pm7_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_3_fhc67qx0_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_4_fhc6g2ty_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_5_fhc6nh83_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_3_fhc6nhb2_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_1_fhc7m1k5_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc7m29v_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_3_fhfn2wwb_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_4_fhfo6d3g_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_2_fhfo6d64_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_3_fhfo6d8l_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_1_fhfopcjl_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_2_fhfopd6q_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_3_fhfophh6_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_4_fhfq2kt6_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_2_fhfq2ky1_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_3_fhfq2l08_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_1_fhfr6rfz_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_2_fhfr6s2j_.arc
+File Name: /fra/NCSCM/backupset/2018_05_11/o1_mf_nnndf_TAG20180511T072405_fhbzbosy_.bkp
+File Name: /fra/NCSCM/autobackup/2018_05_11/o1_mf_s_975828280_fhbzcs4d_.bkp
+
+Do you really want to catalog the above files (enter YES or NO)? y
+cataloging files...
+cataloging done
+
+List of Cataloged Files
+=======================
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_9_fhbzrb54_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_10_fhbzrbo8_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_11_fhbzrcgv_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_10_fhc0osm8_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_11_fhc0ot5m_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_12_fhc0ot8s_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_11_fhc1hz3z_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_12_fhc1hz5q_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_13_fhc1hzgd_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_13_fhc3c38z_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_12_fhc3c3db_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_1_fhc4s1p3_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc4s2d7_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_3_fhc4s5x8_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_4_fhc58kqv_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc58ks2_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_1_fhc5crvo_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc5csnt_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_3_fhc5cxsq_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_4_fhc5n6fo_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc5n6gq_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_1_fhc67p8y_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc67pm7_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_3_fhc67qx0_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_4_fhc6g2ty_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_5_fhc6nh83_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_3_fhc6nhb2_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_1_fhc7m1k5_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc7m29v_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_3_fhfn2wwb_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_4_fhfo6d3g_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_2_fhfo6d64_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_3_fhfo6d8l_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_1_fhfopcjl_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_2_fhfopd6q_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_3_fhfophh6_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_4_fhfq2kt6_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_2_fhfq2ky1_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_3_fhfq2l08_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_1_fhfr6rfz_.arc
+File Name: /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_2_fhfr6s2j_.arc
+File Name: /fra/NCSCM/backupset/2018_05_11/o1_mf_nnndf_TAG20180511T072405_fhbzbosy_.bkp
+File Name: /fra/NCSCM/autobackup/2018_05_11/o1_mf_s_975828280_fhbzcs4d_.bkp
+
+RMAN> list backup;
+
+
+List of Backup Sets
+===================
+
+
+BS Key  Type LV Size       Device Type Elapsed Time Completion Time
+------- ---- -- ---------- ----------- ------------ ---------------
+1       Full    1.26G      DISK        00:00:27     11-MAY-18      
+        BP Key: 1   Status: AVAILABLE  Compressed: NO  Tag: TAG20180511T072405
+        Piece Name: /fra/NCSCM/backupset/2018_05_11/o1_mf_nnndf_TAG20180511T072405_fhbzbosy_.bkp
+  List of Datafiles in backup set 1
+  File LV Type Ckp SCN    Ckp Time  Name
+  ---- -- ---- ---------- --------- ----
+  1       Full 1835888    11-MAY-18 /database/app/oracle/oradata/ncscm/system01.dbf
+  3       Full 1835888    11-MAY-18 /database/app/oracle/oradata/ncscm/sysaux01.dbf
+  4       Full 1835888    11-MAY-18 /database/app/oracle/oradata/ncscm/undotbs01.dbf
+  5       Full 1835888    11-MAY-18 /database/app/oracle/oradata/ncscm/example01.dbf
+  6       Full 1835888    11-MAY-18 
+
+BS Key  Type LV Size       Device Type Elapsed Time Completion Time
+------- ---- -- ---------- ----------- ------------ ---------------
+2       Full    9.64M      DISK        00:00:01     11-MAY-18      
+        BP Key: 2   Status: AVAILABLE  Compressed: NO  Tag: TAG20180511T072440
+        Piece Name: /fra/NCSCM/autobackup/2018_05_11/o1_mf_s_975828280_fhbzcs4d_.bkp
+  SPFILE Included: Modification time: 11-MAY-18
+  SPFILE db_unique_name: NCSCM
+  Control File Included: Ckp SCN: 1835935      Ckp time: 11-MAY-18
+We need to check which redo log is "CURRENT"
+SQL> select group#,sequence#,status,archived,first_change#,next_change# from v$log
+
+    GROUP#  SEQUENCE# STATUS	       ARC FIRST_CHANGE# NEXT_CHANGE#
+---------- ---------- ---------------- --- ------------- ------------
+	 1	    1 INACTIVE	       NO	 2552117      2553931
+	 3	    3 CURRENT	       NO	 2553934   2.8147E+14
+	 2	    2 INACTIVE	       NO	 2553931      2553934
+
+
+
+
+SQL> recover database using backup controlfile until cancel;
+ORA-00279: change 2553934 generated at 05/12/2018 08:40:57 needed for thread 1
+ORA-00289: suggestion : /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_3_%u_.arc
+ORA-00280: change 2553934 for thread 1 is in sequence #3
+
+
+Specify log: {<RET>=suggested | filename | AUTO | CANCEL}
+/database/app/oracle/oradata/ncscm/redo03.log
+Log applied.
+Media recovery complete.
+
+SQL> alter database open resetlogs;
+
+Database altered.
+
+WE query v$datafile to check the status of all datafiles
+and if we forgot to put  a datafile in controlfile code or there is 
+a datafile is dropped or corrupted.
+ SQL> select file#,name,status from v$datafile
+
+     FILE#
+----------
+NAME
+--------------------------------------------------------------------------------
+STATUS
+-------
+	 1
+/database/app/oracle/oradata/ncscm/system01.dbf
+SYSTEM
+
+	 3
+/database/app/oracle/oradata/ncscm/sysaux01.dbf
+ONLINE
+
+     FILE#
+----------
+NAME
+--------------------------------------------------------------------------------
+STATUS
+-------
+
+	 4
+/database/app/oracle/oradata/ncscm/undotbs01.dbf
+ONLINE
+
+	 5
+/database/app/oracle/oradata/ncscm/example01.dbf
+
+     FILE#
+----------
+NAME
+--------------------------------------------------------------------------------
+STATUS
+-------
+ONLINE
+
+	 6
+/database/app/oracle/product/12.1.2/db_home1/dbs/MISSING00006
+RECOVER
+
+
+The status of datafile 6 is recovery and Orcale does not recognize this datafile.
+After checking the datafiles location, this file is dropped.
+We need to restore this datafile.
+
+RMAN> run {
+2> sql'alter tablespace users offline immediate';
+3> set newname for datafile '/database/app/oracle/product/12.1.2/db_home1/dbs/MISSING00006' to '/database/app/oracle/oradata/ncscm/users01.dbf';
+4> restore datafile 6;
+5> switch datafile all;
+6> recover datafile 6;
+7> }
+
+using target database control file instead of recovery catalog
+sql statement: alter tablespace users offline immediate
+
+executing command: SET NEWNAME
+
+Starting restore at 12-MAY-18
+allocated channel: ORA_DISK_1
+channel ORA_DISK_1: SID=42 device type=DISK
+
+channel ORA_DISK_1: starting datafile backup set restore
+channel ORA_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_DISK_1: restoring datafile 00006 to /database/app/oracle/oradata/ncscm/users01.dbf
+channel ORA_DISK_1: reading from backup piece /fra/NCSCM/backupset/2018_05_11/o1_mf_nnndf_TAG20180511T072405_fhbzbosy_.bkp
+channel ORA_DISK_1: piece handle=/fra/NCSCM/backupset/2018_05_11/o1_mf_nnndf_TAG20180511T072405_fhbzbosy_.bkp tag=TAG20180511T072405
+channel ORA_DISK_1: restored backup piece 1
+channel ORA_DISK_1: restore complete, elapsed time: 00:00:01
+Finished restore at 12-MAY-18
+
+datafile 6 switched to datafile copy
+input datafile copy RECID=2 STAMP=975920420 file name=/database/app/oracle/oradata/ncscm/users01.dbf
+
+Starting recover at 12-MAY-18
+using channel ORA_DISK_1
+
+starting media recovery
+
+archived log for thread 1 with sequence 11 is already on disk as file /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_11_fhbzrcgv_.arc
+archived log for thread 1 with sequence 12 is already on disk as file /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_12_fhc3c3db_.arc
+archived log for thread 1 with sequence 13 is already on disk as file /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_13_fhc3c38z_.arc
+archived log for thread 1 with sequence 1 is already on disk as file /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_1_fhc4s1p3_.arc
+archived log for thread 1 with sequence 2 is already on disk as file /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc4s2d7_.arc
+archived log for thread 1 with sequence 3 is already on disk as file /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_3_fhc4s5x8_.arc
+archived log for thread 1 with sequence 1 is already on disk as file /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_1_fhc5crvo_.arc
+archived log for thread 1 with sequence 2 is already on disk as file /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc5csnt_.arc
+archived log for thread 1 with sequence 3 is already on disk as file /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_3_fhc5cxsq_.arc
+archived log for thread 1 with sequence 1 is already on disk as file /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_1_fhc67p8y_.arc
+archived log for thread 1 with sequence 2 is already on disk as file /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc67pm7_.arc
+archived log for thread 1 with sequence 3 is already on disk as file /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_3_fhc67qx0_.arc
+archived log for thread 1 with sequence 4 is already on disk as file /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_4_fhc6g2ty_.arc
+archived log for thread 1 with sequence 5 is already on disk as file /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_5_fhc6nh83_.arc
+archived log for thread 1 with sequence 1 is already on disk as file /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_1_fhc7m1k5_.arc
+archived log for thread 1 with sequence 2 is already on disk as file /fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc7m29v_.arc
+archived log for thread 1 with sequence 3 is already on disk as file /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_3_fhfn2wwb_.arc
+archived log for thread 1 with sequence 4 is already on disk as file /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_4_fhfo6d3g_.arc
+archived log for thread 1 with sequence 1 is already on disk as file /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_1_fhfopcjl_.arc
+archived log for thread 1 with sequence 2 is already on disk as file /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_2_fhfopd6q_.arc
+archived log for thread 1 with sequence 3 is already on disk as file /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_3_fhfophh6_.arc
+archived log for thread 1 with sequence 4 is already on disk as file /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_4_fhfq2kt6_.arc
+archived log for thread 1 with sequence 1 is already on disk as file /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_1_fhfrt6c0_.arc
+archived log for thread 1 with sequence 2 is already on disk as file /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_2_fhfrt6fo_.arc
+archived log for thread 1 with sequence 3 is already on disk as file /fra/NCSCM/archivelog/2018_05_12/o1_mf_1_3_fhfrt6hm_.arc
+archived log file name=/fra/NCSCM/archivelog/2018_05_11/o1_mf_1_11_fhbzrcgv_.arc thread=1 sequence=11
+archived log file name=/fra/NCSCM/archivelog/2018_05_11/o1_mf_1_12_fhc3c3db_.arc thread=1 sequence=12
+archived log file name=/fra/NCSCM/archivelog/2018_05_11/o1_mf_1_13_fhc3c38z_.arc thread=1 sequence=13
+archived log file name=/fra/NCSCM/archivelog/2018_05_11/o1_mf_1_1_fhc4s1p3_.arc thread=1 sequence=1
+archived log file name=/fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc4s2d7_.arc thread=1 sequence=2
+archived log file name=/fra/NCSCM/archivelog/2018_05_11/o1_mf_1_3_fhc4s5x8_.arc thread=1 sequence=3
+archived log file name=/fra/NCSCM/archivelog/2018_05_11/o1_mf_1_1_fhc5crvo_.arc thread=1 sequence=1
+archived log file name=/fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc5csnt_.arc thread=1 sequence=2
+archived log file name=/fra/NCSCM/archivelog/2018_05_11/o1_mf_1_3_fhc5cxsq_.arc thread=1 sequence=3
+archived log file name=/fra/NCSCM/archivelog/2018_05_11/o1_mf_1_1_fhc67p8y_.arc thread=1 sequence=1
+archived log file name=/fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc67pm7_.arc thread=1 sequence=2
+archived log file name=/fra/NCSCM/archivelog/2018_05_11/o1_mf_1_3_fhc67qx0_.arc thread=1 sequence=3
+archived log file name=/fra/NCSCM/archivelog/2018_05_11/o1_mf_1_4_fhc6g2ty_.arc thread=1 sequence=4
+archived log file name=/fra/NCSCM/archivelog/2018_05_11/o1_mf_1_5_fhc6nh83_.arc thread=1 sequence=5
+archived log file name=/fra/NCSCM/archivelog/2018_05_11/o1_mf_1_1_fhc7m1k5_.arc thread=1 sequence=1
+archived log file name=/fra/NCSCM/archivelog/2018_05_11/o1_mf_1_2_fhc7m29v_.arc thread=1 sequence=2
+archived log file name=/fra/NCSCM/archivelog/2018_05_12/o1_mf_1_3_fhfn2wwb_.arc thread=1 sequence=3
+archived log file name=/fra/NCSCM/archivelog/2018_05_12/o1_mf_1_4_fhfo6d3g_.arc thread=1 sequence=4
+archived log file name=/fra/NCSCM/archivelog/2018_05_12/o1_mf_1_1_fhfopcjl_.arc thread=1 sequence=1
+archived log file name=/fra/NCSCM/archivelog/2018_05_12/o1_mf_1_2_fhfopd6q_.arc thread=1 sequence=2
+archived log file name=/fra/NCSCM/archivelog/2018_05_12/o1_mf_1_3_fhfophh6_.arc thread=1 sequence=3
+archived log file name=/fra/NCSCM/archivelog/2018_05_12/o1_mf_1_4_fhfq2kt6_.arc thread=1 sequence=4
+archived log file name=/fra/NCSCM/archivelog/2018_05_12/o1_mf_1_1_fhfrt6c0_.arc thread=1 sequence=1
+archived log file name=/fra/NCSCM/archivelog/2018_05_12/o1_mf_1_2_fhfrt6fo_.arc thread=1 sequence=2
+archived log file name=/fra/NCSCM/archivelog/2018_05_12/o1_mf_1_3_fhfrt6hm_.arc thread=1 sequence=3
+media recovery complete, elapsed time: 00:00:01
+Finished recover at 12-MAY-18
+
+
+SQL> alter tablespace users online;
+
+Tablespace altered.
+
+SQL> select file#,name,status from v$datafile
+
+
+     FILE#
+----------
+NAME
+--------------------------------------------------------------------------------
+STATUS
+-------
+	 1
+/database/app/oracle/oradata/ncscm/system01.dbf
+SYSTEM
+
+	 3
+/database/app/oracle/oradata/ncscm/sysaux01.dbf
+ONLINE
+
+     FILE#
+----------
+NAME
+--------------------------------------------------------------------------------
+STATUS
+-------
+
+	 4
+/database/app/oracle/oradata/ncscm/undotbs01.dbf
+ONLINE
+
+	 5
+/database/app/oracle/oradata/ncscm/example01.dbf
+
+     FILE#
+----------
+NAME
+--------------------------------------------------------------------------------
+STATUS
+-------
+ONLINE
+
+	 6
+/database/app/oracle/oradata/ncscm/users01.dbf
+ONLINE
+The status of datafile 6 is online now.
